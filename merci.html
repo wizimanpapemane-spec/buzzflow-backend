@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merci — Agence Boost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #05060a;
+            --accent: #00e5ff;
+            --accent2: #ff3d6b;
+            --text: #f0f2ff;
+            --muted: #5a5f7a;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Glow blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px; left: -100px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -150px; right: -100px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255,61,107,0.07) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(5,6,10,0.95), transparent);
+        }
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+
+        /* CARD */
+        .card {
+            text-align: center;
+            max-width: 540px;
+            width: 100%;
+            background: #0d0f17;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 24px;
+            padding: 36px 40px 40px;
+            position: relative;
+            animation: fadeUp 0.8s cubic-bezier(.22,1,.36,1) both;
+        }
+
+        /* top accent line */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 48px; right: 48px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* CHECKMARK */
+        .check-wrapper {
+            width: 70px; height: 70px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        .check-circle {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: rgba(0,229,255,0.08);
+            border: 2px solid rgba(0,229,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: popIn 0.6s 0.3s cubic-bezier(.22,1,.36,1) both;
+        }
+        .check-circle svg {
+            width: 40px; height: 40px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 60;
+            stroke-dashoffset: 60;
+            animation: drawCheck 0.5s 0.7s ease forwards;
+        }
+
+        /* Ping ring */
+        .check-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,229,255,0.15);
+            animation: ping 2s 1s ease-out infinite;
+        }
+
+        @keyframes ping {
+            0%   { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        @keyframes drawCheck {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        /* TEXT */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(0,229,255,0.07);
+            border: 1px solid rgba(0,229,255,0.2);
+            border-radius: 999px;
+            padding: 5px 14px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.6s 0.4s cubic-bezier(.22,1,.36,1) both;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            animation: fadeUp 0.6s 0.5s cubic-bezier(.22,1,.36,1) both;
+        }
+        h1 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 24px;
+            animation: fadeUp 0.6s 0.6s cubic-bezier(.22,1,.36,1) both;
+        }
+
+        /* STEPS */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+            text-align: left;
+            animation: fadeUp 0.6s 0.7s cubic-bezier(.22,1,.36,1) both;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 14px 18px;
+        }
+        .step-num {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(0,229,255,0.1);
+            border: 1px solid rgba(0,229,255,0.2);
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-text {
+            font-size: 0.88rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.6);
+        }
+        .step-text strong { color: var(--text); font-weight: 500; }
+
+        /* WHATSAPP BTN */
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            animation: fadeUp 0.6s 0.8s cubic-bezier(.22,1,.36,1) both;
+        }
+        .btn-whatsapp svg { width: 20px; height: 20px; }
+        .btn-whatsapp:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(37,211,102,0.3);
+        }
+
+        /* BTN */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--accent) 0%, #0099cc 100%);
+            color: #05060a;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            animation: fadeUp 0.6s 0.8s cubic-bezier(.22,1,.36,1) both;
+        }
+        .btn-back:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(0,229,255,0.25);
+        }
+        .btn-back svg {
+            width: 14px; height: 14px;
+            stroke: #05060a;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 540px) {
+            .card { padding: 44px 24px; }
+            nav { padding: 16px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="logo">Boost<span>.</span></a>
+    </nav>
+
+    <div class="card">
+
+        <div class="check-wrapper">
+            <div class="check-circle">
+                <svg viewBox="0 0 40 40">
+                    <polyline points="8,20 16,28 32,12"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="tag">Demande reçue</div>
+
+        <h1>Merci, votre demande<br>est <em>bien envoyée</em></h1>
+
+        <p>Notre equipe a bien recu votre demande de devis.<br>Nous vous recontactons dans les plus brefs delais.</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text"><strong>Analyse de votre projet</strong> — on etudie votre demande en detail</div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text"><strong>Reponse sous 24h</strong> — on vous propose une strategie adaptee</div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text"><strong>Lancement de votre campagne</strong> — on s'occupe de tout</div>
+            </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+            <a href="https://wa.me/2250556600639" target="_blank" class="btn-whatsapp">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.526 5.845L.057 23.428a.75.75 0 00.916.916l5.632-1.476A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.886 0-3.65-.52-5.15-1.426l-.36-.214-3.938 1.032 1.048-3.827-.235-.374A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                Discuter sur WhatsApp
+            </a>
+            <a href="/" class="btn-back">
+                <svg viewBox="0 0 16 16"><line x1="14" y1="8" x2="2" y2="8"/><polyline points="7,3 2,8 7,13"/></svg>
+                Retour à l'accueil
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
