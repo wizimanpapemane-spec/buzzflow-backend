@@ -9,15 +9,28 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg: #080810;
-            --surface: #0e0e1a;
-            --card: #13131f;
-            --border: rgba(255,255,255,0.06);
-            --yellow: #f5e642;
-            --pink: #ff2d6b;
-            --blue: #2de8ff;
-            --text: #f0f0ff;
-            --muted: #5a5a7a;
+            /* Palette logo : cosmic purple/dark + orange-yellow gradient + magenta neon */
+            --bg: #0a0812;
+            --surface: #0f0b1a;
+            --card: #130f1f;
+            --border: rgba(255,255,255,0.07);
+
+            /* BUZZ = orange-jaune gradient */
+            --buzz-start: #f5a623;
+            --buzz-end: #f5e642;
+            /* FLOW = blanc-lavande */
+            --flow: #e8d8ff;
+            /* Accent magenta/rose néon (traits du logo) */
+            --neon: #e040c8;
+            --neon2: #ff2d9b;
+            /* Signal wifi = gradient orange→rose */
+            --signal: linear-gradient(135deg, #f5a623, #e040c8);
+
+            --yellow: #f5c842;
+            --orange: #f5a623;
+            --pink: #e040c8;
+            --text: #f0eeff;
+            --muted: #6a5a8a;
         }
 
         html { scroll-behavior: smooth; }
@@ -29,12 +42,26 @@
             overflow-x: hidden;
         }
 
-        /* ── NOISE TEXTURE ── */
+        /* Noise texture */
         body::before {
             content: '';
             position: fixed; inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none; z-index: 0; opacity: 0.4;
+            pointer-events: none; z-index: 0; opacity: 0.5;
+        }
+
+        /* Starfield effect */
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 60% 15%, rgba(255,200,100,0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 80% 60%, rgba(224,64,200,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+                radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 90% 40%, rgba(245,166,35,0.4) 0%, transparent 100%);
+            pointer-events: none; z-index: 0;
         }
 
         /* ── NAV ── */
@@ -43,24 +70,30 @@
             padding: 18px 48px;
             display: flex; align-items: center; justify-content: space-between;
             z-index: 100;
-            background: rgba(8,8,16,0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
+            background: rgba(10,8,18,0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(224,64,200,0.12);
         }
         .logo {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             letter-spacing: 0.08em;
-            color: var(--text);
         }
-        .logo span { color: var(--yellow); }
+        .logo .buzz {
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo .flow { color: var(--flow); }
+
         .nav-cta {
             padding: 9px 22px;
-            background: var(--yellow);
-            color: #080810;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            color: #0a0812;
             border-radius: 6px;
             font-size: 0.82rem;
-            font-weight: 500;
+            font-weight: 700;
             text-decoration: none;
             letter-spacing: 0.06em;
             transition: opacity 0.2s, transform 0.15s;
@@ -76,27 +109,53 @@
             padding: 120px 24px 80px;
             position: relative;
         }
-        .hero-glow {
-            position: absolute; top: 20%; left: 50%;
-            transform: translateX(-50%);
-            width: 700px; height: 400px;
-            background: radial-gradient(ellipse, rgba(245,230,66,0.07) 0%, transparent 65%);
+        .hero-glow-orange {
+            position: absolute; top: 15%; left: 30%;
+            width: 500px; height: 300px;
+            background: radial-gradient(ellipse, rgba(245,166,35,0.09) 0%, transparent 65%);
             pointer-events: none;
         }
+        .hero-glow-pink {
+            position: absolute; bottom: 20%; right: 20%;
+            width: 400px; height: 250px;
+            background: radial-gradient(ellipse, rgba(224,64,200,0.1) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        /* Magenta light streak like the logo */
+        .hero-streak {
+            position: absolute;
+            bottom: 25%; left: -5%; right: -5%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(224,64,200,0.6) 40%, rgba(255,45,155,0.8) 60%, transparent 100%);
+            transform: rotate(-8deg);
+            filter: blur(2px);
+            pointer-events: none;
+        }
+        .hero-streak2 {
+            position: absolute;
+            top: 30%; left: -5%; right: -5%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(245,166,35,0.4) 50%, transparent 100%);
+            transform: rotate(-8deg);
+            filter: blur(1px);
+            pointer-events: none;
+        }
+
         .hero-tag {
             display: inline-flex; align-items: center; gap: 8px;
             font-size: 0.75rem; font-weight: 500;
             letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--yellow);
-            background: rgba(245,230,66,0.08);
-            border: 1px solid rgba(245,230,66,0.2);
+            color: var(--orange);
+            background: rgba(245,166,35,0.08);
+            border: 1px solid rgba(245,166,35,0.25);
             border-radius: 999px; padding: 6px 18px;
             margin-bottom: 28px;
             animation: fadeUp 0.6s both;
         }
         .hero-tag::before {
             content: ''; width: 6px; height: 6px;
-            border-radius: 50%; background: var(--yellow);
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
             animation: blink 1.6s infinite;
         }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
@@ -109,8 +168,19 @@
             margin-bottom: 28px;
             animation: fadeUp 0.6s 0.1s both;
         }
-        .hero h1 .line2 { color: var(--yellow); display: block; }
-        .hero h1 .line3 { color: var(--pink); display: block; font-size: 0.6em; }
+        .hero h1 .line2 {
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+        .hero h1 .line3 {
+            color: var(--flow);
+            display: block;
+            font-size: 0.6em;
+            text-shadow: 0 0 30px rgba(224,64,200,0.4);
+        }
 
         .hero p {
             font-size: 1.05rem; font-weight: 300;
@@ -125,46 +195,56 @@
         }
         .btn-primary {
             padding: 15px 36px;
-            background: var(--yellow);
-            color: #080810;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            color: #0a0812;
             border-radius: 8px;
-            font-size: 0.9rem; font-weight: 600;
+            font-size: 0.9rem; font-weight: 700;
             text-decoration: none;
             letter-spacing: 0.05em;
             transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
         }
-        .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245,230,66,0.25); }
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245,166,35,0.3); }
         .btn-outline {
             padding: 15px 36px;
             background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border);
+            color: var(--flow);
+            border: 1px solid rgba(224,64,200,0.3);
             border-radius: 8px;
             font-size: 0.9rem; font-weight: 400;
             text-decoration: none;
             letter-spacing: 0.05em;
             transition: border-color 0.2s, background 0.2s;
         }
-        .btn-outline:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.03); }
+        .btn-outline:hover { border-color: rgba(224,64,200,0.6); background: rgba(224,64,200,0.05); }
 
         /* STATS */
         .stats {
             display: flex; justify-content: center; gap: 0;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
+            border-top: 1px solid rgba(224,64,200,0.12);
+            border-bottom: 1px solid rgba(224,64,200,0.12);
             margin: 0;
             animation: fadeUp 0.6s 0.4s both;
+            position: relative;
+        }
+        .stats::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--orange), var(--pink), transparent);
         }
         .stat {
             flex: 1; max-width: 220px;
             padding: 36px 24px; text-align: center;
-            border-right: 1px solid var(--border);
+            border-right: 1px solid rgba(224,64,200,0.1);
         }
         .stat:last-child { border-right: none; }
         .stat-num {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 2.8rem; letter-spacing: 0.04em;
-            color: var(--yellow); display: block; margin-bottom: 4px;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block; margin-bottom: 4px;
         }
         .stat-label { font-size: 0.78rem; color: var(--muted); font-weight: 300; letter-spacing: 0.06em; }
 
@@ -175,8 +255,8 @@
             display: inline-block;
             font-size: 0.72rem; font-weight: 500;
             letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--yellow);
-            border-left: 2px solid var(--yellow);
+            color: var(--orange);
+            border-left: 2px solid var(--orange);
             padding-left: 12px; margin-bottom: 20px;
         }
         .section-title {
@@ -198,23 +278,23 @@
         }
         .service-card {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(224,64,200,0.1);
             border-radius: 16px; padding: 32px 28px;
             position: relative; overflow: hidden;
             transition: border-color 0.3s, transform 0.2s;
         }
-        .service-card:hover { border-color: rgba(245,230,66,0.2); transform: translateY(-3px); }
+        .service-card:hover { border-color: rgba(245,166,35,0.3); transform: translateY(-3px); }
         .service-card::before {
             content: ''; position: absolute;
             top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, var(--yellow), var(--pink));
+            background: linear-gradient(90deg, var(--orange), var(--pink));
             opacity: 0; transition: opacity 0.3s;
         }
         .service-card:hover::before { opacity: 1; }
         .service-icon {
             width: 48px; height: 48px;
-            background: rgba(245,230,66,0.08);
-            border: 1px solid rgba(245,230,66,0.15);
+            background: rgba(245,166,35,0.08);
+            border: 1px solid rgba(245,166,35,0.2);
             border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 20px; font-size: 1.4rem;
@@ -223,6 +303,7 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.3rem; letter-spacing: 0.06em;
             margin-bottom: 10px;
+            color: var(--flow);
         }
         .service-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; font-weight: 300; }
 
@@ -233,56 +314,75 @@
         }
         .why-item {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(224,64,200,0.1);
             border-radius: 14px; padding: 28px 24px;
             display: flex; gap: 16px; align-items: flex-start;
         }
         .why-num {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem; color: rgba(245,230,66,0.2);
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--orange), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.5;
             line-height: 1; flex-shrink: 0; width: 36px;
         }
-        .why-item h4 { font-size: 0.92rem; font-weight: 500; margin-bottom: 6px; }
+        .why-item h4 { font-size: 0.92rem; font-weight: 500; margin-bottom: 6px; color: var(--flow); }
         .why-item p { font-size: 0.82rem; color: var(--muted); font-weight: 300; line-height: 1.65; }
 
         /* ── TEMOIGNAGE ── */
         .temoignage-wrap {
             margin-top: 52px;
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(224,64,200,0.15);
             border-radius: 20px; padding: 48px;
             position: relative; overflow: hidden;
         }
         .temoignage-wrap::before {
             content: '';
             position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, var(--yellow), var(--pink), var(--blue));
+            background: linear-gradient(90deg, var(--orange), var(--pink), var(--flow));
+        }
+        /* Magenta glow streak */
+        .temoignage-wrap::after {
+            content: '';
+            position: absolute; bottom: 10%; left: -10%; right: -10%;
+            height: 60px;
+            background: linear-gradient(90deg, transparent, rgba(224,64,200,0.08), transparent);
+            transform: rotate(-3deg);
+            pointer-events: none;
         }
         .quote-mark {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 6rem; color: rgba(245,230,66,0.08);
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--orange), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.2;
             line-height: 0.8; margin-bottom: 16px;
         }
         .temoignage-wrap blockquote {
             font-size: 1.15rem; font-weight: 300;
-            line-height: 1.8; color: rgba(255,255,255,0.8);
+            line-height: 1.8; color: rgba(232,216,255,0.85);
             margin-bottom: 28px; font-style: italic;
         }
         .temoignage-client { display: flex; align-items: center; gap: 14px; }
         .client-avatar {
             width: 44px; height: 44px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--yellow), var(--pink));
+            background: linear-gradient(135deg, var(--orange), var(--pink));
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: #080810;
+            font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: #0a0812;
         }
-        .client-name { font-size: 0.88rem; font-weight: 500; }
+        .client-name { font-size: 0.88rem; font-weight: 500; color: var(--flow); }
         .client-role { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
         .result-badge {
             margin-left: auto;
-            background: rgba(245,230,66,0.08);
-            border: 1px solid rgba(245,230,66,0.2);
+            background: rgba(245,166,35,0.08);
+            border: 1px solid rgba(245,166,35,0.25);
             border-radius: 999px; padding: 6px 16px;
-            font-size: 0.78rem; color: var(--yellow); font-weight: 500;
+            font-size: 0.78rem; color: var(--orange); font-weight: 600;
         }
 
         /* ── TARIFS ── */
@@ -293,18 +393,19 @@
         }
         .tarif-card {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(224,64,200,0.12);
             border-radius: 20px; padding: 36px 32px;
             position: relative; transition: transform 0.2s;
         }
         .tarif-card:hover { transform: translateY(-4px); }
         .tarif-card.featured {
-            border-color: rgba(245,230,66,0.3);
-            background: linear-gradient(160deg, #16161f 0%, #1a1a10 100%);
+            border-color: rgba(245,166,35,0.35);
+            background: linear-gradient(160deg, #18101e 0%, #1a1208 100%);
         }
         .featured-badge {
             position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            background: var(--yellow); color: #080810;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            color: #0a0812;
             font-size: 0.72rem; font-weight: 700;
             letter-spacing: 0.1em; text-transform: uppercase;
             padding: 4px 16px; border-radius: 999px;
@@ -312,79 +413,96 @@
         .tarif-name {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.4rem; letter-spacing: 0.08em;
-            margin-bottom: 8px;
+            margin-bottom: 8px; color: var(--flow);
         }
         .tarif-price {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 3rem; letter-spacing: 0.02em;
-            color: var(--yellow); line-height: 1;
-            margin-bottom: 4px;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1; margin-bottom: 4px;
         }
-        .tarif-price span { font-size: 1rem; color: var(--muted); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+        .tarif-price span { font-size: 1rem; color: var(--muted); font-family: 'DM Sans', sans-serif; font-weight: 300; -webkit-text-fill-color: var(--muted); }
         .tarif-desc { font-size: 0.82rem; color: var(--muted); font-weight: 300; margin-bottom: 28px; }
         .tarif-features { list-style: none; margin-bottom: 32px; }
         .tarif-features li {
             display: flex; align-items: center; gap: 10px;
             font-size: 0.85rem; font-weight: 300;
-            color: rgba(255,255,255,0.7);
+            color: rgba(232,216,255,0.75);
             padding: 8px 0;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(224,64,200,0.08);
         }
         .tarif-features li:last-child { border-bottom: none; }
         .tarif-features li::before {
             content: ''; width: 6px; height: 6px;
-            border-radius: 50%; background: var(--yellow); flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), var(--pink));
+            flex-shrink: 0;
         }
         .btn-tarif {
             width: 100%; padding: 13px;
             background: transparent;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(224,64,200,0.25);
             border-radius: 8px;
-            color: var(--text);
+            color: var(--flow);
             font-family: 'DM Sans', sans-serif;
             font-size: 0.88rem; font-weight: 500;
             cursor: pointer; text-align: center;
             text-decoration: none; display: block;
             transition: all 0.2s;
         }
-        .btn-tarif:hover { border-color: var(--yellow); color: var(--yellow); }
+        .btn-tarif:hover { border-color: var(--orange); color: var(--orange); }
         .tarif-card.featured .btn-tarif {
-            background: var(--yellow); border-color: var(--yellow);
-            color: #080810; font-weight: 600;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            border-color: transparent;
+            color: #0a0812; font-weight: 700;
         }
         .tarif-card.featured .btn-tarif:hover { opacity: 0.88; }
 
         /* ── FORMULAIRE ── */
         .form-section {
             background: var(--surface);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
+            border-top: 1px solid rgba(224,64,200,0.12);
+            border-bottom: 1px solid rgba(224,64,200,0.12);
             padding: 100px 24px;
+            position: relative; overflow: hidden;
         }
-        .form-inner { max-width: 680px; margin: 0 auto; }
+        /* Cosmic streak in form section */
+        .form-section::before {
+            content: '';
+            position: absolute; bottom: 15%; left: -10%; right: -10%;
+            height: 120px;
+            background: radial-gradient(ellipse at center, rgba(224,64,200,0.06) 0%, transparent 70%);
+            transform: rotate(-5deg);
+        }
+        .form-inner { max-width: 680px; margin: 0 auto; position: relative; }
         .form-card {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(224,64,200,0.15);
             border-radius: 24px; padding: 52px 48px;
             position: relative;
         }
         .form-card::before {
             content: ''; position: absolute;
             top: 0; left: 48px; right: 48px; height: 2px;
-            background: linear-gradient(90deg, var(--yellow), var(--pink));
+            background: linear-gradient(90deg, var(--orange), var(--pink));
             border-radius: 0 0 2px 2px;
         }
 
         .success-banner {
             display: flex; align-items: center; gap: 12px;
-            background: rgba(45,232,255,0.06);
-            border: 1px solid rgba(45,232,255,0.2);
+            background: rgba(224,64,200,0.06);
+            border: 1px solid rgba(224,64,200,0.25);
             border-radius: 10px; padding: 14px 18px;
-            margin-bottom: 24px; font-size: 0.88rem; color: var(--blue);
+            margin-bottom: 24px; font-size: 0.88rem; color: var(--flow);
         }
         .success-banner::before {
             content: ''; width: 8px; height: 8px;
-            border-radius: 50%; background: var(--blue); flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), var(--pink));
+            flex-shrink: 0;
         }
 
         .field { margin-bottom: 20px; }
@@ -393,14 +511,14 @@
 
         label {
             display: block; font-size: 0.75rem; font-weight: 500;
-            color: rgba(255,255,255,0.4);
+            color: rgba(232,216,255,0.35);
             letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
         }
 
         input, textarea, select {
             width: 100%; padding: 13px 16px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(224,64,200,0.12);
             border-radius: 10px;
             font-family: 'DM Sans', sans-serif;
             font-size: 0.9rem; font-weight: 300;
@@ -410,31 +528,36 @@
         }
         input::placeholder, textarea::placeholder { color: var(--muted); }
         select { cursor: pointer; }
-        select option { background: #13131f; }
+        select option { background: #130f1f; }
         input:focus, textarea:focus, select:focus {
-            border-color: rgba(245,230,66,0.35);
-            background: rgba(245,230,66,0.02);
+            border-color: rgba(245,166,35,0.4);
+            background: rgba(245,166,35,0.02);
         }
 
-        .error-msg { font-size: 0.75rem; color: var(--pink); margin-top: 6px; display: none; }
+        .error-msg { font-size: 0.75rem; color: var(--neon2); margin-top: 6px; display: none; }
         .field.has-error input,
         .field.has-error textarea,
-        .field.has-error select { border-color: rgba(255,45,107,0.4); }
+        .field.has-error select { border-color: rgba(224,64,200,0.5); }
         .field.has-error .error-msg { display: block; }
 
         .budget-pills { display: flex; gap: 8px; flex-wrap: wrap; }
         .bpill input[type="radio"] { display: none; }
         .bpill label {
-            padding: 7px 14px; border: 1px solid var(--border);
+            padding: 7px 14px; border: 1px solid rgba(224,64,200,0.15);
             border-radius: 999px; font-size: 0.78rem;
             color: var(--muted); cursor: pointer;
             transition: all 0.2s; text-transform: none; letter-spacing: normal;
         }
-        .bpill input:checked + label { border-color: var(--yellow); color: var(--yellow); background: rgba(245,230,66,0.08); }
+        .bpill input:checked + label {
+            border-color: var(--orange);
+            color: var(--orange);
+            background: rgba(245,166,35,0.08);
+        }
 
         .btn-submit {
             width: 100%; padding: 16px;
-            background: var(--yellow); color: #080810;
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            color: #0a0812;
             border: none; border-radius: 10px;
             font-family: 'DM Sans', sans-serif;
             font-size: 0.95rem; font-weight: 700;
@@ -442,16 +565,29 @@
             transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
             margin-top: 10px;
         }
-        .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 10px 32px rgba(245,230,66,0.25); }
+        .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 10px 32px rgba(245,166,35,0.3); }
         .btn-submit:active { transform: scale(0.98); }
 
         /* ── FOOTER ── */
         footer {
             text-align: center; padding: 40px 24px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(224,64,200,0.1);
             font-size: 0.8rem; color: var(--muted); font-weight: 300;
+            position: relative;
         }
-        footer strong { color: var(--yellow); font-weight: 500; }
+        footer::before {
+            content: '';
+            position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--orange), var(--pink), transparent);
+        }
+        footer .buzz-foot {
+            background: linear-gradient(90deg, var(--orange), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        footer .flow-foot { color: var(--flow); font-weight: 500; }
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(24px); }
@@ -467,7 +603,7 @@
             .temoignage-client { flex-wrap: wrap; }
             .result-badge { margin-left: 0; }
             .stats { flex-wrap: wrap; }
-            .stat { border-right: none; border-bottom: 1px solid var(--border); max-width: 100%; }
+            .stat { border-right: none; border-bottom: 1px solid rgba(224,64,200,0.1); max-width: 100%; }
         }
     </style>
 </head>
@@ -475,20 +611,23 @@
 
 <!-- NAV -->
 <nav>
-    <div class="logo">BUZZ<span>FLOW</span></div>
+    <div class="logo"><span class="buzz">BUZZ</span><span class="flow">FLOW</span></div>
     <a href="#contact" class="nav-cta">Devis Gratuit</a>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-    <div class="hero-glow"></div>
+    <div class="hero-glow-orange"></div>
+    <div class="hero-glow-pink"></div>
+    <div class="hero-streak"></div>
+    <div class="hero-streak2"></div>
     <div class="hero-tag">Agence Marketing Digital — Abidjan</div>
     <h1>
         VOTRE PUB<br>
         <span class="line2">QUI VEND</span>
         <span class="line3">sur les réseaux sociaux</span>
     </h1>
-    <p>Boostage, publicité de vente, creation de compte pro et landing pages — on gere tout pour que votre business explose en ligne.</p>
+    <p>Boostage, publicite de vente, creation de compte pro et landing pages — on gere tout pour que votre business explose en ligne.</p>
     <div class="hero-btns">
         <a href="#contact" class="btn-primary">Demander un devis</a>
         <a href="#services" class="btn-outline">Nos services</a>
@@ -512,7 +651,7 @@
         <div class="service-card">
             <div class="service-icon">🚀</div>
             <h3>Boostage de Publications</h3>
-            <p>On booste vos publications Facebook et Instagram 7j/7 pour toucher un maximum de personnes dans votre zone cible a Abidjan et partout en Côte d’Ivoire.</p>
+            <p>On booste vos publications Facebook et Instagram 7j/7 pour toucher un maximum de personnes dans votre zone cible a Abidjan et partout en Côte d'Ivoire.</p>
         </div>
         <div class="service-card">
             <div class="service-icon">💰</div>
@@ -522,7 +661,7 @@
         <div class="service-card">
             <div class="service-icon">⚙️</div>
             <h3>Création Comptes Pro</h3>
-            <p>Nous créons et gérons vos campagnes Facebook,Instagram,Tiktok et Landing page pour attirer plus des clients et augmenter vos ventes.</p>
+            <p>Nous créons et gérons vos campagnes Facebook, Instagram, Tiktok et Landing page pour attirer plus des clients et augmenter vos ventes.</p>
         </div>
         <div class="service-card">
             <div class="service-icon">🎯</div>
@@ -555,7 +694,7 @@
         <div class="why-item">
             <div class="why-num">03</div>
             <div>
-                <h4>forfait tout-en-un</h4>
+                <h4>Forfait tout-en-un</h4>
                 <p>Compte pro + landing page + publicite + suivi. Vous n'avez rien a faire. On gere tout de A a Z pour que vous vous concentrer sur votre business.</p>
             </div>
         </div>
@@ -569,7 +708,7 @@
     </div>
 
     <!-- TEMOIGNAGE -->
-    <div class="témoignage-wrap" style="margin-top:52px">
+    <div class="temoignage-wrap">
         <div class="quote-mark">"</div>
         <blockquote>Depuis que Buzz Flow gere nos publicités, notre chiffre d'affaires a vraiment augmenté. Ils boostent nos publications 7 jours sur 7 et on voit les résultats directement. Je recommande a tous les commercants d'Abidjan.</blockquote>
         <div class="temoignage-client">
@@ -587,10 +726,10 @@
 <section id="tarifs">
     <div class="section-tag">Investissement</div>
     <h2 class="section-title">NOS TARIFS</h2>
-    <p class="section-sub">Des forfait clairs et accessibles pour chaque etape de votre croissance. Sans frais cachés.</p>
+    <p class="section-sub">Des forfaits clairs et accessibles pour chaque etape de votre croissance. Sans frais cachés.</p>
     <div class="tarifs-grid">
         <div class="tarif-card">
-            <div class="tarif-name">forfait Starter</div>
+            <div class="tarif-name">Forfait Starter</div>
             <div class="tarif-price">50 000 <span>FCFA/mois</span></div>
             <div class="tarif-desc">Pour demarrer et tester le marketing digital</div>
             <ul class="tarif-features">
@@ -610,7 +749,7 @@
             <ul class="tarif-features">
                 <li>Boostage 7j/7</li>
                 <li>2 réseaux sociaux</li>
-                <li>3 visuels crées par semaine</li>
+                <li>3 visuels créés par semaine</li>
                 <li>Rapport hebdomadaire</li>
                 <li>Budget pub inclus : 30 000 FCFA</li>
                 <li>Support prioritaire</li>
@@ -618,7 +757,7 @@
             <a href="#contact" class="btn-tarif">Choisir ce forfait</a>
         </div>
         <div class="tarif-card">
-            <div class="tarif-name">forfait Premium</div>
+            <div class="tarif-name">Forfait Premium</div>
             <div class="tarif-price">200 000 <span>FCFA/mois</span></div>
             <div class="tarif-desc">Pour dominer votre marché à Abidjan</div>
             <ul class="tarif-features">
@@ -626,9 +765,9 @@
                 <li>Création compte pro + landing page</li>
                 <li>Contenu illimité</li>
                 <li>Campagnes de vente</li>
-                <li>Rapport hebdomadaire détaille</li>
+                <li>Rapport hebdomadaire détaillé</li>
                 <li>Budget pub inclus : 60 000 FCFA</li>
-                <li>Gestionnaire dedié</li>
+                <li>Gestionnaire dédié</li>
             </ul>
             <a href="#contact" class="btn-tarif">Choisir ce forfait</a>
         </div>
@@ -639,15 +778,11 @@
 <div class="form-section" id="contact">
     <div class="form-inner">
         <div style="text-align:center; margin-bottom:48px">
-            <div class="section-tag" style="border-left-color:var(--yellow)">Contact</div>
+            <div class="section-tag">Contact</div>
             <h2 class="section-title">DEVIS GRATUIT</h2>
             <p class="section-sub" style="margin:0 auto">Reponse garantie sous 24h — sans engagement. Decrivez votre projet et on vous propose la meilleure strategie.</p>
         </div>
         <div class="form-card">
-
-            {% if message %}
-            <div class="success-banner">{{ message }}</div>
-            {% endif %}
 
             <form method="POST" action="/contact" id="contactForm" novalidate>
                 <div class="field-row">
@@ -681,7 +816,7 @@
                         <option value="pub-vente">Publicité de vente</option>
                         <option value="compte-pro">Création compte professionnel</option>
                         <option value="landing">Création landing page</option>
-                        <option value="premium">forfait complet Premium</option>
+                        <option value="premium">Forfait complet Premium</option>
                     </select>
                     <div class="error-msg">Choisissez un service</div>
                 </div>
@@ -709,19 +844,20 @@
 
 <!-- FOOTER -->
 <footer>
-    <p style="margin-bottom:8px"><strong>BUZZ FLOW AGENCY</strong></p>
-    <p>Marketing Digital — Abidjan, Côte d’Ivoire</p>
-    <p style="margin-top:12px; font-size:0.72rem">© 2025 Buzz Flow Agency. Nous créons le Buzz, nous contrôlons le Flow </p>
+    <p style="margin-bottom:8px; font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.08em">
+        <span class="buzz-foot">BUZZ</span><span class="flow-foot">FLOW</span> <span style="color:var(--muted); font-size:0.9rem">AGENCY</span>
+    </p>
+    <p>Marketing Digital — Abidjan, Côte d'Ivoire</p>
+    <p style="margin-top:12px; font-size:0.72rem">© 2025 Buzz Flow Agency. Nous créons le Buzz, nous contrôlons le Flow</p>
 </footer>
 
 <script>
-    // Blocage symboles
     const ALPHA = /[^A-Za-zÀ-ÖØ-öø-ÿ\s\-]/g;
     const NUM   = /[^0-9\s\+\-]/g;
     const MSG   = /[^A-Za-z0-9À-ÖØ-öø-ÿ\s\-\.\,\!\?\'\(\)]/g;
 
     function sanitize(id, rx) {
-        const el = document.getElementById ? document.querySelector(`[name="${id}"]`) : null;
+        const el = document.querySelector(`[name="${id}"]`);
         if (!el) return;
         el.addEventListener('input', function() {
             const p = this.selectionStart;
@@ -733,7 +869,6 @@
     sanitize('telephone', NUM);
     sanitize('message', MSG);
 
-    // Validation
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         let ok = true;
         const checks = [
@@ -760,4 +895,3 @@
 </script>
 </body>
 </html>
-
